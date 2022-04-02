@@ -30,6 +30,14 @@ docker run -it --rm -v $(pwd):/project -v ~/.vimrc:/42-user/.vimrc:ro -v ~/.vim/
 
 This will mount your current directory into /project and also link your vim configuration files.
 
+### Tips
+
+You can add the following line to your .bashrc/.zshrc configuration file to be able to launch the container with the command `42tools`.
+
+```
+alias 42tools="docker run -it --rm -v $(pwd):/project -v ~/.vimrc:/42-user/.vimrc:ro -v ~/.vim/:/42-user/.vim:ro ycornamusaz/42-tools"
+```
+
 ### TODO
 
 * Cleaner Dockerfile
