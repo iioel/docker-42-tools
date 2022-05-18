@@ -1,15 +1,18 @@
-ARG DEBIAN_VERSION="11"
-FROM debian:${DEBIAN_VERSION}
+ARG KASM_VERSION="1.10.0"
+FROM kasmweb/core-ubuntu-bionic:${KASM_VERSION}
 ARG NM_VERSION=3.3.51
 ENV NM_VERSION=${NM_VERSION}
+USER 0
 #RUN apt update && apt upgrade -y && rm -rf /var/lib/apt/lists/*
 RUN apt update && apt install -y python3 python3-pip && rm -rf /var/lib/apt/lists/*
-RUN apt update && apt install -y build-essential lldb gdb man && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y build-essential lldb gdb man libx11-dev libxext-dev && rm -rf /var/lib/apt/lists/*
 RUN apt update && apt install -y sudo vim valgrind most && rm -rf /var/lib/apt/lists/*
-RUN sudo python3 -m pip install --upgrade pip setuptools && python3 -m pip install norminette==$NM_VERSION
+#RUN sudo python3 -m pip install --upgrade pip setuptools && python3 -m pip install norminette==$NM_VERSION
 RUN echo "42	ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/42 && \
 	mkdir /42-user && useradd -u 1000 -s /bin/bash --home /42-user 42
 ADD .bashrc /42-user/.bashrc
+COPY vnc_startup.sh /dockerstartup/vnc_startup.sh
+RUN chown -R root:root /dockerstartup && chmod +x /dockerstartup/vnc_startup.sh
 VOLUME /project
 WORKDIR /project
 USER 1000
